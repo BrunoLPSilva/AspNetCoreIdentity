@@ -1,0 +1,62 @@
+﻿@model EditUserViewModel
+
+<h3>Usuário</h3>
+
+<div class="form-group row">
+    <label asp-for="Id" class="col-sm-2 col-form-label"></label>
+    <div class="col-sm-10">
+        <input asp-for="Id" disabled class="form-control">
+    </div>
+</div>
+
+<div class="form-group row">
+    <label asp-for="Email" class="col-sm-2 col-form-label"></label>
+    <div class="col-sm-10">
+        <input asp-for="Email" disabled class="form-control">
+    </div>
+</div>
+
+<div class="form-group row">
+    <label asp-for="UserName" class="col-sm-2 col-form-label"></label>
+    <div class="col-sm-10">
+        <input asp-for="UserName" disabled class="form-control">
+    </div>
+</div>
+
+<div class="col-sm-10 mt-2">
+    <a asp-action="Create" asp-route-userId="@Model.Id" class="btn btn-success">Criar Claim</a>
+    <a asp-action="Index" class="btn btn-outline-dark">Cancelar</a>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        <h3>Claims</h3>
+    </div>
+    <div class="card-body">
+        @if (Model.Claims.Any())
+        {
+            <table class="table table-sm table-bordered table-bordered">
+                <tr><th>Valor</th><th>Tipo</th></tr>
+                @foreach (var claim in Model.Claims)
+                {
+                    <tr>
+                        <td>@claim.Value</td>
+                        <td>@claim.Type</td>
+                        <td>
+                            <form asp-action="DeleteClaim" method="post">
+                                <input type="hidden" name="claimValues" value="@claim.Type;@claim.Value;@Model.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirma ?');">
+                                    Deletar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <h5 class="card-title">Não existem claims</h5>
+        }
+    </div>
+</div>

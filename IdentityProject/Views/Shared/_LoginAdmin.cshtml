@@ -1,0 +1,48 @@
+﻿@* @using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@functions {
+    public async Task<bool> IsUserInRoleAsync(ClaimsPrincipal user, string role)
+    {
+        var appUser = await UserManager.GetUserAsync(user);
+        if (appUser != null)
+        {
+            return await UserManager.IsInRoleAsync(appUser, role);
+        }
+        return false;
+    }
+}
+
+@{
+    bool isAdmin = false;
+    if (SignInManager.IsSignedIn(User))
+    {
+         isAdmin = await IsUserInRoleAsync(User, "Admin");
+
+        // @if (User.IsInRole("Admin"))
+        // {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin</a>
+            </li>
+        //}
+        
+    }
+}
+
+ *@
+
+ @using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin</a>
+        </li>
+    }
+}
